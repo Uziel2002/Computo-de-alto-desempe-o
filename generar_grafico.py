@@ -7,8 +7,8 @@ from datetime import datetime
 
 # Conexión con Elastic Cloud
 es = Elasticsearch(
-    cloud_id=os.environ["ELASTIC_CLOUD_ID"],
-    basic_auth=(os.environ["ELASTIC_USERNAME"], os.environ["ELASTIC_PASSWORD"])
+    cloud_id=os.environ["172f9438c56f434f9c52a102fa1c2fe3:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyQzNDkxNjUwMGQxYWQ0YjVlODgxYjI1ODFkOTgyZGYwOCQxMjcxOTMyMGM5ZDg0OTkwOTEzNzc2YzlhMjRkZThmZQ=="],
+    basic_auth=(os.environ["elastic"], os.environ["5oo0qkVXLn7C7NlldSu5lCfC"])
 )
 
 # Cargar CSV
