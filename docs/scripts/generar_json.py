@@ -8,7 +8,7 @@ print("Directorio actual:", os.getcwd())
 os.makedirs("data", exist_ok=True)
 
 # Ruta al archivo CSV - ajusta esto según la ubicación real de tu CSV
-csv_path = "data/muertes_mx.csv"
+csv_path = "C:/Users/uziel/OneDrive/Documentos/Computo-de-alto-desempe-o/docs/data/muertes_mx.csv"
 
 try:
     # Leer el archivo CSV 
