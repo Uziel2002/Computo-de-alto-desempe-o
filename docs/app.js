@@ -21,10 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Rutas posibles para el archivo JSON basado en tu estructura
   const possiblePaths = [
-    "data/muertes_mx_clean.json",  // Principal ubicación según tu estructura
-    "./data/muertes_mx_clean.json",
-    "../data/muertes_mx_clean.json",
-    "/data/muertes_mx_clean.json"
+    "C:/Users/uziel/OneDrive/Documentos/Computo-de-alto-desempe-o/docs/data/muertes_mx.csv",  // Principal ubicación según tu estructura
   ];
 
   // Función para intentar cargar los datos
