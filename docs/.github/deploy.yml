@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Se activará con cualquier push a la rama main
+
+permissions:
+  contents: write # Permisos necesarios para el flujo de trabajo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Establece la imagen de Ubuntu más reciente para la ejecución
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3 # Clona el repositorio para que el flujo de trabajo pueda acceder a los archivos
+
+      - name: Set up Python for file conversion (si es necesario)
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x" # Si necesitas convertir CSV a JSON con Python, este paso sería útil
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt  # Si tienes un archivo requirements.txt para tus dependencias de Python
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Usa el token de GitHub
+          publish_dir: ./docs # La carpeta 'docs' debe contener el archivo 'index.html' y los archivos estáticos
+
+      - name: Clear Cache (opcional)
+        run: |
+          echo "Deploying"

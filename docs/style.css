@@ -1,0 +1,54 @@
+/* Estilos generales para la página */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Contenedor del gráfico */
+.chart-container {
+  width: 80%;
+  max-width: 900px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Estilo para el título */
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #5a5a5a;
+}
+
+/* Estilo para el mensaje de error */
+.error-message {
+  background-color: #ffdddd;
+  border: 1px solid #ff0000;
+  padding: 20px;
+  border-radius: 10px;
+  color: #ff0000;
+}
+
+.error-message h3 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.error-message p {
+  font-size: 1em;
+}
+
+/* Estilo para el gráfico */
+canvas {
+  width: 100% !important;
+  height: 400px !important;
+}
