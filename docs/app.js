@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   // Ruta al archivo JSON en el sitio publicado
-  const dataPath = "data/muertes_mx_clean.json";
+const dataPath = "data/muertes_mx_clean.json";
 
   // Función para cargar los datos
   async function loadData() {
