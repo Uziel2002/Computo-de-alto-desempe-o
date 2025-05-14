@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const canvas = document.getElementById("chart");  // Obtener el canvas por su id
   const chartCtx = canvas.getContext("2d"); // Obtener el contexto del canvas
 
-  // Cargar datos desde el archivo JSON
-  fetch("data/muertes_mx_clean.json")
+  // Cargar datos desde el archivo JSON - Ruta corregida
+  fetch("docs/data/muertes_mx_clean.json")
     .then((response) => {
       if (!response.ok) {
         throw new Error(`¡Error HTTP! Estado: ${response.status}`);
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ).innerHTML = `<div class="error-message">
                         <h3>Error al cargar los datos</h3>
                         <p>${error.message}</p>
-                        <p>Ruta intentada: data/muertes_mx_clean.json</p>
+                        <p>Ruta intentada: docs/data/muertes_mx_clean.json</p>
                     </div>`;
     });
 });
