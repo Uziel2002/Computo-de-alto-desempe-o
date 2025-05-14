@@ -6,17 +6,15 @@ import requests
 ELASTIC_URL = "http://localhost:9200"  # Asegúrate de que el puerto sea el correcto
 INDEX_NAME = "muertes_mx"
 
-# Leer el archivo CSV
-df = pd.read_csv("C:/Users/uziel/OneDrive/Documentos/Computo-de-alto-desempe-o/docs/data/muertes_mx.csv", encoding="latin1")
+# Leer el archivo JSON
+df = pd.read_json("docs/data/muertes_mx_clean.json", orient="records", lines=True)
 
-# Convertir la columna 'date' a datetime con el formato 'DD-MM-YY'
-df['date'] = pd.to_datetime(df['date'], format='%d-%m-%y', errors='coerce')
+# Verificar las primeras filas del DataFrame
+print("Primeras filas del archivo JSON:")
+print(df.head())
 
-# Convertir las fechas a formato de cadena 'YYYY-MM-DD' antes de cargarlas en Elasticsearch
-df['date'] = df['date'].dt.strftime('%Y-%m-%d')
-
-# Verificar que las fechas estén correctamente convertidas
-print(df.head())  # Verifica cómo quedan las fechas
+# Asegurarse de que la columna 'date' esté en formato de cadena 'YYYY-MM-DD' (en caso de que no lo esté)
+df['date'] = pd.to_datetime(df['date'], errors='coerce').dt.strftime('%Y-%m-%d')
 
 # Eliminar el índice actual si existe
 response = requests.head(f"{ELASTIC_URL}/{INDEX_NAME}")
