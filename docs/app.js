@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("data/muertes_mx_clean.json")
     .then((response) => {
       if (!response.ok) {
-        throw new Error("¡Error HTTP! Estado: ",$(response.status));
+        throw new Error(`¡Error HTTP! Estado: ${response.status}`);
       }
-      return response.json();
+      return response.json(); // Usar .json() en lugar de .text()
     })
     .then((data) => {
       // Procesar los datos para la visualización
@@ -21,36 +21,26 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector(
         ".chart-container"
       ).innerHTML = `<div class="error-message">
-          <h3>Error al cargar los datos</h3>
-          <p>${error.message}</p>
-          <p>Ruta intentada: data/muertes_mx_clean.json</p>
-        </div>`;
+                        <h3>Error al cargar los datos</h3>
+                        <p>${error.message}</p>
+                        <p>Ruta intentada: data/muertes_mx_clean.json</p>
+                    </div>`;
     });
 });
 
 function processData(data) {
-  // Limpiar y verificar los datos
-  const dates = [];
-  const muertes = [];
-
-  data.forEach((item) => {
-    const date = item.date; // Ajustar la columna de fecha
-    const muertesValue = parseInt(item.deaths, 10); // Ajustar la columna de muertes
-
-    if (date && !isNaN(muertesValue)) {
-      dates.push(date);
-      muertes.push(muertesValue);
-    }
-  });
+  // Extraer las fechas y los valores de muertes
+  const dates = data.map((item) => item.date); // Asegúrate de que 'date' esté bien formateado en el JSON
+  const deaths = data.map((item) => parseInt(item.deaths, 10));
 
   return {
     dates: dates,
-    muertes: muertes,
+    deaths: deaths,
   };
 }
 
 function createChart(data, ctx) {
-  const color = "rgba(0, 77, 152, 0.8)"; // Color para muertes
+  const color = "rgba(0, 77, 152, 0.8)"; // Color para el número de muertes
 
   new Chart(ctx, {
     type: "line",
@@ -59,7 +49,7 @@ function createChart(data, ctx) {
       datasets: [
         {
           label: "Muertes",
-          data: data.muertes,
+          data: data.deaths,
           backgroundColor: color,
           borderColor: color.replace("0.8", "1"),
           borderWidth: 1,
@@ -89,7 +79,7 @@ function createChart(data, ctx) {
           callbacks: {
             afterLabel: function (context) {
               const index = context.dataIndex;
-              return Muertes; $(data.muertes[index]);
+              return `Muertes: ${data.deaths[index]}`;
             },
           },
         },

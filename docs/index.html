@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <link rel="stylesheet" href="style.css">
-    <script src="app.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Número de Muertes en México</title>
@@ -93,7 +91,7 @@
         fetch("data/muertes_mx_clean.json")
           .then((response) => {
             if (!response.ok) {
-              throw new Error(¡Error HTTP! Estado: ${response.status});
+              throw new Error(`¡Error HTTP! Estado: ${response.status}`);
             }
             return response.json(); // Usar .json() en lugar de .text()
           })
@@ -167,7 +165,7 @@
                 callbacks: {
                   afterLabel: function (context) {
                     const index = context.dataIndex;
-                    return Muertes: ${data.deaths[index]};
+                    return `Muertes: ${data.deaths[index]}`;
                   },
                 },
               },
