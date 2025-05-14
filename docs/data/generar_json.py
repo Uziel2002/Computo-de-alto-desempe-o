@@ -12,8 +12,11 @@ print(df.head())
 # Convertir la columna 'date' a datetime con el formato 'DD-MM-YY'
 df['date'] = pd.to_datetime(df['date'], format='%d-%m-%y', errors='coerce')  # Convertir 'date' a datetime
 
-# Imprimir las primeras filas para verificar la conversión
+# Verificar si la conversión fue correcta
 print(df.head())
+
+# Convertir las fechas a formato de cadena (en lugar de timestamp)
+df['date'] = df['date'].dt.strftime('%Y-%m-%d')  # Convertir la fecha a 'YYYY-MM-DD'
 
 # Limpiar los nombres de las columnas (en minúsculas, sin espacios y caracteres especiales)
 df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_').str.replace('+', 'plus').str.replace('/', '_')
