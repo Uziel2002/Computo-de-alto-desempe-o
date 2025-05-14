@@ -15,7 +15,7 @@ Este informe presenta los resultados de las pruebas de balanceo de carga realiza
 - **Host**: localhost
 - **Puerto**: 80
 - **Sistema Operativo**: Linux (Parrot OS)
-- **Entorno**: Contenedor Docker
+
 
 ## Análisis de Resultados
 
@@ -105,4 +105,13 @@ El tiempo de respuesta aumenta de 0.23s con 25 usuarios a 4.48s con 50 usuarios,
 5. **Análisis de Recursos**: Complementar estas pruebas con monitoreo de recursos del sistema (CPU, memoria, I/O) durante las pruebas para identificar cuellos de botella específicos.
 
 6. **Considerar Caché**: Implementar soluciones de caché para reducir la carga en el servidor para contenido estático o frecuentemente solicitado.
+
+![Texto alternativo](parcial_3/img/prueba_25.png)
+
+![Texto alternativo](parcial_3/img/comparacion_ab.png)
+
+![Texto alternativo](parcial_3/img/tiempo_respuesta.png)
+
+![Texto alternativo](parcial_3/img/transparencia.png)
+
 
