@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import json
+import re
 
 print("Directorio actual:", os.getcwd())
 
@@ -14,40 +15,48 @@ try:
     # Leer el archivo CSV 
     df = pd.read_csv(csv_path, encoding="latin1")
 
-    # Imprimir las primeras filas para verificar el formato de las fechas
+    # Imprimir las primeras filas para verificar el formato original
     print("Primeras filas antes de la conversión:")
     print(df.head())
 
-    # Convertir la columna 'date' a datetime con el formato 'DD-MM-YY'
-    df['date'] = pd.to_datetime(df['date'], format='%d-%m-%y', errors='coerce')
+    # Verificar y convertir la columna 'date'
+    if 'date' in df.columns:
+        df['date'] = pd.to_datetime(df['date'], format='%d-%m-%y', errors='coerce')
+        df = df[df['date'].notna()]  # Filtrar fechas inválidas
+        df['date'] = df['date'].dt.strftime('%Y-%m-%d')
+    else:
+        print("Advertencia: No se encontró la columna 'date'. Se omitirá la conversión de fechas.")
 
-    # Verificar si la conversión fue correcta
-    print("Primeras filas después de la conversión a datetime:")
-    print(df.head())
+    # Limpiar nombres de columnas (minúsculas, sin espacios ni caracteres especiales)
+    df.columns = [
+        re.sub(r'\W+', '_', col.strip().lower())
+        for col in df.columns
+    ]
 
-    # Convertir las fechas a formato de cadena (en lugar de timestamp)
-    df['date'] = df['date'].dt.strftime('%Y-%m-%d')  # Convertir la fecha a 'YYYY-MM-DD'
+    # Convertir columna 'deaths' a entero si existe
+    if 'deaths' in df.columns:
+        df['deaths'] = pd.to_numeric(df['deaths'], errors='coerce').fillna(0).astype(int)
 
-    # Limpiar los nombres de las columnas (en minúsculas, sin espacios y caracteres especiales)
-    df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_').str.replace('+', 'plus').str.replace('/', '_')
+    # Asegurarse de que la columna 'date' esté ordenada si existe
+    if 'date' in df.columns:
+        df = df.sort_values(by="date")
 
-    # Asegurarse de que la columna 'date' esté ordenada
-    df = df.sort_values(by="date")
-
-    # Crear la ruta de salida del JSON
+    # Ruta de salida del JSON
     output_json = "data/muertes_mx_clean.json"
 
-    # Guardar el archivo JSON como array (no como JSONL)
+    # Guardar como lista de objetos JSON
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(df.to_dict(orient="records"), f, ensure_ascii=False, indent=2)
 
-    print(f"Archivo JSON generado correctamente en {output_json}")
+    print(f"✅ Archivo JSON generado correctamente en: {output_json}")
+    print(f"🔢 {len(df)} registros procesados.")
+    print("🧾 Columnas exportadas:", df.columns.tolist())
 
 except FileNotFoundError:
-    print(f"Error: No se encontró el archivo CSV en {csv_path}")
+    print(f"⚠️ Error: No se encontró el archivo CSV en {csv_path}")
     print("Generando datos de muestra...")
-    
-    # Crear datos de muestra si el archivo original no se encuentra
+
+    # Datos de muestra
     sample_data = [
         {"date": "2020-01-01", "deaths": 1200},
         {"date": "2020-02-01", "deaths": 1150},
@@ -62,13 +71,12 @@ except FileNotFoundError:
         {"date": "2020-11-01", "deaths": 1600},
         {"date": "2020-12-01", "deaths": 1500}
     ]
-    
-    # Guardar los datos de muestra como JSON
-    output_json = "data/muertes_mx_clean.json"
-    with open(output_json, 'w', encoding='utf-8') as f:
+
+    # Guardar datos de muestra
+    with open("data/muertes_mx_clean.json", 'w', encoding='utf-8') as f:
         json.dump(sample_data, f, ensure_ascii=False, indent=2)
-    
-    print(f"Archivo JSON con datos de muestra generado en {output_json}")
+
+    print("✅ Archivo JSON con datos de muestra generado en: data/muertes_mx_clean.json")
 
 except Exception as e:
-    print(f"Error al procesar el archivo: {e}")
+    print(f"❌ Error al procesar el archivo: {e}")
