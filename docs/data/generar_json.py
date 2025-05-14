@@ -6,11 +6,19 @@ print("Directorio actual:", os.getcwd())
 # Leer el archivo CSV
 df = pd.read_csv("C:/Users/uziel/OneDrive/Documentos/Computo-de-alto-desempe-o/docs/data/muertes_mx.csv", encoding="latin1")
 
+# Imprimir las primeras filas para verificar el formato de las fechas
+print(df.head())
+
+# Convertir la columna 'date' a datetime con el formato 'DD-MM-YY'
+df['date'] = pd.to_datetime(df['date'], format='%d-%m-%y', errors='coerce')  # Convertir 'date' a datetime
+
+# Imprimir las primeras filas para verificar la conversión
+print(df.head())
+
 # Limpiar los nombres de las columnas (en minúsculas, sin espacios y caracteres especiales)
-df.columns = df.columns.str.strip().str.lower().str.replace(' ', '').str.replace('+', 'plus').str.replace('/', '')
+df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_').str.replace('+', 'plus').str.replace('/', '_')
 
 # Asegurarse de que la columna 'date' sea tipo datetime y ordenarlo por esta columna
-df['date'] = pd.to_datetime(df['date'], errors='coerce')  # Convertir 'date' a datetime
 df = df.sort_values(by="date")
 
 # Crear el directorio si no existe
