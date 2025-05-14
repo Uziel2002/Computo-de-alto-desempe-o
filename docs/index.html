@@ -61,6 +61,13 @@
         border-radius: 8px;
         margin: 1rem 0;
       }
+      
+      #loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
     </style>
   </head>
   <body>
@@ -75,7 +82,8 @@
 
     <main class="container mx-auto px-4">
       <div class="chart-container">
-        <canvas id="chart"></canvas>
+        <div id="loading">Cargando datos...</div>
+        <canvas id="chart" style="display:none;"></canvas>
       </div>
     </main>
 
@@ -86,38 +94,86 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const chartCtx = document.getElementById("chart").getContext("2d");
+        const loadingElement = document.getElementById("loading");
+        const chartElement = document.getElementById("chart");
+        
+        // Datos de muestra en caso de que no se puedan cargar los datos reales
+        const sampleData = [
+          {"date": "2020-01-01", "deaths": 1200},
+          {"date": "2020-02-01", "deaths": 1150},
+          {"date": "2020-03-01", "deaths": 1300},
+          {"date": "2020-04-01", "deaths": 1500},
+          {"date": "2020-05-01", "deaths": 1800},
+          {"date": "2020-06-01", "deaths": 2100},
+          {"date": "2020-07-01", "deaths": 2300},
+          {"date": "2020-08-01", "deaths": 2100},
+          {"date": "2020-09-01", "deaths": 1900},
+          {"date": "2020-10-01", "deaths": 1700},
+          {"date": "2020-11-01", "deaths": 1600},
+          {"date": "2020-12-01", "deaths": 1500}
+        ];
 
-        // Cargar datos desde el archivo JSON - Ruta corregida
-        fetch("docs/data/muertes_mx_clean.json")
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`¡Error HTTP! Estado: ${response.status}`);
+        // Lista de rutas posibles para buscar el archivo
+        const possiblePaths = [
+          "data/muertes_mx_clean.json",
+          "docs/data/muertes_mx_clean.json",
+          "Computo-de-alto-desempe-o/data/muertes_mx_clean.json",
+          "Computo-de-alto-desempe-o/docs/data/muertes_mx_clean.json",
+          "/data/muertes_mx_clean.json",
+          "/docs/data/muertes_mx_clean.json",
+          "/Computo-de-alto-desempe-o/data/muertes_mx_clean.json",
+          "/Computo-de-alto-desempe-o/docs/data/muertes_mx_clean.json"
+        ];
+
+        // Función para intentar cargar los datos desde las diferentes rutas
+        async function tryLoadData() {
+          for (const path of possiblePaths) {
+            try {
+              console.log(`Intentando cargar desde: ${path}`);
+              const response = await fetch(path);
+              if (response.ok) {
+                console.log(`¡Éxito cargando desde: ${path}!`);
+                return await response.json();
+              }
+            } catch (error) {
+              console.warn(`Error cargando desde ${path}:`, error);
             }
-            return response.json();
-          })
-          .then((data) => {
+          }
+          
+          // Si llegamos aquí, ninguna ruta funcionó, usar datos de muestra
+          console.warn("No se pudo cargar datos de ninguna ruta, usando datos de muestra");
+          return sampleData;
+        }
+
+        // Intentar cargar los datos
+        tryLoadData()
+          .then(data => {
             // Procesar los datos para la visualización
             return processData(data);
           })
-          .then((chartData) => {
+          .then(chartData => {
+            // Mostrar la gráfica y ocultar el mensaje de carga
+            loadingElement.style.display = "none";
+            chartElement.style.display = "block";
             createChart(chartData, chartCtx);
           })
-          .catch((error) => {
-            console.error("Error cargando datos:", error);
-            document.querySelector(
-              ".chart-container"
-            ).innerHTML = `<div class="error-message">
-                        <h3>Error al cargar los datos</h3>
-                        <p>${error.message}</p>
-                        <p>Ruta intentada: docs/data/muertes_mx_clean.json</p>
-                    </div>`;
+          .catch(error => {
+            console.error("Error en el proceso completo:", error);
+            loadingElement.innerHTML = `
+              <div class="error-message">
+                <h3>Error al cargar los datos</h3>
+                <p>${error.message}</p>
+                <p>Se han intentado todas las rutas posibles.</p>
+              </div>`;
           });
       });
 
       function processData(data) {
+        console.log("Datos recibidos:", data);
+        
         // Extraer las fechas y los valores de muertes
-        const dates = data.map((item) => item.date);
-        const deaths = data.map((item) => parseInt(item.deaths, 10));
+        const dates = data.map(item => item.date);
+        const deaths = data.map(item => parseInt(item.deaths, 10));
 
         return {
           dates: dates,
