@@ -34,8 +34,8 @@ function processData(data) {
   const muertes = [];
 
   data.forEach((item) => {
-    const date = item.fecha; // Ajustar la columna de fecha
-    const muertesValue = parseInt(item.muertes, 10); // Ajustar la columna de muertes
+    const date = item.date; // Ajustar la columna de fecha
+    const muertesValue = parseInt(item.deaths, 10); // Ajustar la columna de muertes
 
     if (date && !isNaN(muertesValue)) {
       dates.push(date);

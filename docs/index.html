@@ -1,17 +1,200 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gráfico de Muertes en México</title>
-  <link rel="stylesheet" href="style.css"> <!-- Enlazar el archivo de estilos -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Cargar la librería Chart.js -->
-</head>
-<body>
-  <div class="chart-container">
-    <canvas id="chart"></canvas>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Número de Muertes en México</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
 
-  <script src="app.js"></script> <!-- Enlazar el archivo JavaScript -->
-</body>
+      header {
+        background-color: #004d98; /* Azul */
+        color: white;
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-bottom: 2rem;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .chart-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        height: 500px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 1rem;
+        background-color: #f0f0f0;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .error-message {
+        background-color: #fee2e2;
+        border: 1px solid #ef4444;
+        color: #b91c1c;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="text-3xl font-bold">
+        Número de Muertes en México
+      </h1>
+      <p class="mt-2">
+        Análisis del número de muertes a lo largo del tiempo
+      </p>
+    </header>
+
+    <main class="container mx-auto px-4">
+      <div class="chart-container">
+        <canvas id="chart"></canvas>
+      </div>
+    </main>
+
+    <footer>
+      <p>Datos extraídos de fuentes oficiales</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const chartCtx = document.getElementById("chart").getContext("2d");
+
+        // Cargar datos desde el archivo JSON
+        fetch("data/muertes_mx_clean.json")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(¡Error HTTP! Estado: ${response.status});
+            }
+            return response.json(); // Usar .json() en lugar de .text()
+          })
+          .then((data) => {
+            // Procesar los datos para la visualización
+            return processData(data);
+          })
+          .then((chartData) => {
+            createChart(chartData, chartCtx);
+          })
+          .catch((error) => {
+            console.error("Error cargando datos:", error);
+            document.querySelector(
+              ".chart-container"
+            ).innerHTML = `<div class="error-message">
+                        <h3>Error al cargar los datos</h3>
+                        <p>${error.message}</p>
+                        <p>Ruta intentada: data/muertes_mx_clean.json</p>
+                    </div>`;
+          });
+      });
+
+      function processData(data) {
+        // Extraer las fechas y los valores de muertes
+        const dates = data.map((item) => item.date); // Asegúrate de que 'date' esté bien formateado en el JSON
+        const deaths = data.map((item) => parseInt(item.deaths, 10));
+
+        return {
+          dates: dates,
+          deaths: deaths,
+        };
+      }
+
+      function createChart(data, ctx) {
+        const color = "rgba(0, 77, 152, 0.8)"; // Color para el número de muertes
+
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: data.dates,
+            datasets: [
+              {
+                label: "Muertes",
+                data: data.deaths,
+                backgroundColor: color,
+                borderColor: color.replace("0.8", "1"),
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Número de Muertes en México",
+                font: {
+                  size: 18,
+                  weight: "bold",
+                },
+                padding: {
+                  top: 10,
+                  bottom: 20,
+                },
+              },
+              legend: {
+                position: "top",
+              },
+              tooltip: {
+                callbacks: {
+                  afterLabel: function (context) {
+                    const index = context.dataIndex;
+                    return Muertes: ${data.deaths[index]};
+                  },
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Número de Muertes",
+                },
+                grid: {
+                  display: true,
+                  color: "rgba(0, 0, 0, 0.05)",
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: "Fecha",
+                },
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
 </html>
