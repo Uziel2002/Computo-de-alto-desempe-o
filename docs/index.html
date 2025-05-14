@@ -9,7 +9,71 @@
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #004d98; /* Azul */
+        color: white;
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-bottom: 2rem;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .chart-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        height: 500px;
+        position: relative;
+      }
+
+      footer {
+        text-align: center;
+        padding: 1rem;
+        background-color: #f0f0f0;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .error-message {
+        background-color: #fee2e2;
+        border: 1px solid #ef4444;
+        color: #b91c1c;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+      }
+      
+      #loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -28,23 +92,19 @@
       </div>
       
       <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4" role="alert">
-        <p class="font-bold">Estructura del proyecto:</p>
-        <ul class="list-disc pl-5 mt-2">
-          <li>Archivos raíz:
+        <p class="font-bold">Instrucciones para la instalación:</p>
+        <ol class="list-decimal pl-5 mt-2">
+          <li>Asegúrate de que los archivos estén organizados correctamente:
             <ul class="list-disc pl-5 mt-1">
-              <li>index.html - Página principal</li>
-              <li>app.js - Script de la aplicación</li>
-              <li>style.css - Estilos</li>
+              <li>index.html (en el directorio raíz)</li>
+              <li>app.js (en el directorio raíz)</li>
+              <li>docs/data/muertes_mx_clean.json (archivo de datos)</li>
             </ul>
           </li>
-          <li class="mt-2">Carpetas:
-            <ul class="list-disc pl-5 mt-1">
-              <li>data/ - Contiene los datos (muertes_mx_clean.json)</li>
-              <li>scripts/ - Scripts de Python para procesar datos</li>
-              <li>.github/ - Configuración de GitHub</li>
-            </ul>
-          </li>
-        </ul>
+          <li class="mt-2">Ejecuta el script <code>generar_json.py</code> para crear el archivo JSON:</li>
+          <li class="mt-1">Si no tienes el archivo CSV original, el script generará datos de muestra automáticamente.</li>
+          <li class="mt-2">Abre esta página usando un servidor web (no directamente como archivo local).</li>
+        </ol>
       </div>
     </main>
 
