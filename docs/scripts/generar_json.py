@@ -42,7 +42,7 @@ try:
         df = df.sort_values(by="date")
 
     # Ruta de salida del JSON
-    output_json = "data/muertes_mx_clean.json"
+    output_json = "/docs/data/muertes_mx_clean.json"
 
     # Guardar como lista de objetos JSON
     with open(output_json, 'w', encoding='utf-8') as f:
