@@ -19,36 +19,27 @@ document.addEventListener("DOMContentLoaded", function () {
     {"date": "2020-12-01", "deaths": 1500}
   ];
 
-  // Rutas posibles para el archivo JSON basado en tu estructura
-  const possiblePaths = [
-    "C:/Users/uziel/OneDrive/Documentos/Computo-de-alto-desempe-o/docs/data/muertes_mx.csv",  // Principal ubicación según tu estructura
-  ];
+  // Ruta al archivo JSON en el sitio publicado
+  const dataPath = "data/muertes_mx_clean.json";
 
-  // Función para intentar cargar los datos
-  async function tryLoadData() {
-    for (const path of possiblePaths) {
-      try {
-        console.log(`Intentando cargar desde: ${path}`);
-        const response = await fetch(path);
-        if (response.ok) {
-          console.log(`¡Éxito cargando desde: ${path}!`);
-          return await response.json();
-        }
-      } catch (error) {
-        console.warn(`Error cargando desde ${path}:`, error);
+  // Función para cargar los datos
+  async function loadData() {
+    try {
+      const response = await fetch(dataPath);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.warn(`No se pudo cargar los datos desde ${dataPath}, usando datos de muestra.`);
+        return sampleData;
       }
+    } catch (error) {
+      console.error(`Error al cargar los datos: ${error}`);
+      return sampleData;
     }
-    
-    // Si no se encuentra en ninguna ruta, usar datos de muestra
-    console.warn("No se pudo cargar datos de ninguna ruta, usando datos de muestra");
-    return sampleData;
   }
 
   // Procesar los datos para la visualización
   function processData(data) {
-    console.log("Datos recibidos:", data);
-    
-    // Extraer las fechas y los valores de muertes
     const dates = data.map(item => item.date);
     const deaths = data.map(item => parseInt(item.deaths, 10));
 
@@ -60,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Crear la gráfica con Chart.js
   function createChart(data, ctx) {
-    const color = "rgba(0, 77, 152, 0.8)"; // Color para el número de muertes
+    const color = "rgba(0, 77, 152, 0.8)";
 
     new Chart(ctx, {
       type: "line",
@@ -132,12 +123,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Cargar los datos e inicializar la gráfica
-  tryLoadData()
+  loadData()
     .then(data => {
-      return processData(data);
-    })
-    .then(chartData => {
-      // Mostrar la gráfica y ocultar el mensaje de carga
+      const chartData = processData(data);
       if (loadingElement) {
         loadingElement.style.display = "none";
       }
