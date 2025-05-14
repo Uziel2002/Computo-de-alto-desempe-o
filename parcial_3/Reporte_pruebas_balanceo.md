@@ -106,12 +106,12 @@ El tiempo de respuesta aumenta de 0.23s con 25 usuarios a 4.48s con 50 usuarios,
 
 6. **Considerar Caché**: Implementar soluciones de caché para reducir la carga en el servidor para contenido estático o frecuentemente solicitado.
 
-![Texto alternativo](parcial_3/img/prueba_25.png)
+![Texto alternativo](img/prueba_25.png)
 
-![Texto alternativo](parcial_3/img/comparacion_ab.png)
+![Texto alternativo](img/comparacion_ab.png)
 
-![Texto alternativo](parcial_3/img/tiempo_respuesta.png)
+![Texto alternativo](img/tiempo_respuesta.png)
 
-![Texto alternativo](parcial_3/img/transparencia.png)
+![Texto alternativo](img/transparencia.png)
 
 
