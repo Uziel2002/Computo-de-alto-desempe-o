@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("data/muertes_mx_clean.json")
     .then((response) => {
       if (!response.ok) {
-        throw new Error(¡Error HTTP! Estado: ${response.status});
+        throw new Error("¡Error HTTP! Estado: ",$(response.status));
       }
       return response.json();
     })
@@ -89,7 +89,7 @@ function createChart(data, ctx) {
           callbacks: {
             afterLabel: function (context) {
               const index = context.dataIndex;
-              return Muertes: ${data.muertes[index]};
+              return Muertes; $(data.muertes[index]);
             },
           },
         },
