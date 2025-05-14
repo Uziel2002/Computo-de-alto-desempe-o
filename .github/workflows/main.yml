@@ -1,1 +1,36 @@
+name: Generar gráfico desde Elasticsearch
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar script
+        run: python generar_grafico.py
+        env:
+          ELASTIC_CLOUD_ID: ${{ secrets.172f9438c56f434f9c52a102fa1c2fe3:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyQzNDkxNjUwMGQxYWQ0YjVlODgxYjI1ODFkOTgyZGYwOCQxMjcxOTMyMGM5ZDg0OTkwOTEzNzc2YzlhMjRkZThmZQ==}}
+          ELASTIC_USERNAME: ${{ secrets.elastic }}
+          ELASTIC_PASSWORD: ${{ secrets.5oo0qkVXLn7C7NlldSu5lCfC }}
+
+      - name: Publicar en GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
 
