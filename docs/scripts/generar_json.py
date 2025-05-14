@@ -4,11 +4,11 @@ import json
 
 print("Directorio actual:", os.getcwd())
 
-# Crear los directorios si no existen
-os.makedirs("docs/data", exist_ok=True)
+# Crear el directorio de datos si no existe
+os.makedirs("data", exist_ok=True)
 
 # Ruta al archivo CSV - ajusta esto según la ubicación real de tu CSV
-csv_path = "docs/data/muertes_mx.csv"
+csv_path = "data/muertes_mx.csv"
 
 try:
     # Leer el archivo CSV 
@@ -35,7 +35,7 @@ try:
     df = df.sort_values(by="date")
 
     # Crear la ruta de salida del JSON
-    output_json = "docs/data/muertes_mx_clean.json"
+    output_json = "data/muertes_mx_clean.json"
 
     # Guardar el archivo JSON como array (no como JSONL)
     with open(output_json, 'w', encoding='utf-8') as f:
@@ -64,7 +64,7 @@ except FileNotFoundError:
     ]
     
     # Guardar los datos de muestra como JSON
-    output_json = "docs/data/muertes_mx_clean.json"
+    output_json = "data/muertes_mx_clean.json"
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(sample_data, f, ensure_ascii=False, indent=2)
     

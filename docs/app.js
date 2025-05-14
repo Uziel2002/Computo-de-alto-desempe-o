@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
     {"date": "2020-12-01", "deaths": 1500}
   ];
 
-  // Rutas posibles para el archivo JSON
+  // Rutas posibles para el archivo JSON basado en tu estructura
   const possiblePaths = [
-    "docs/data/muertes_mx_clean.json",
-    "./docs/data/muertes_mx_clean.json",
-    "../docs/data/muertes_mx_clean.json",
-    "/docs/data/muertes_mx_clean.json"
+    "data/muertes_mx_clean.json",  // Principal ubicación según tu estructura
+    "./data/muertes_mx_clean.json",
+    "../data/muertes_mx_clean.json",
+    "/data/muertes_mx_clean.json"
   ];
 
   // Función para intentar cargar los datos
@@ -141,17 +141,21 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(chartData => {
       // Mostrar la gráfica y ocultar el mensaje de carga
-      loadingElement.style.display = "none";
+      if (loadingElement) {
+        loadingElement.style.display = "none";
+      }
       canvas.style.display = "block";
       createChart(chartData, chartCtx);
     })
     .catch(error => {
       console.error("Error en el proceso completo:", error);
-      loadingElement.innerHTML = `
-        <div class="error-message">
-          <h3>Error al cargar los datos</h3>
-          <p>${error.message}</p>
-          <p>Se han intentado todas las rutas posibles.</p>
-        </div>`;
+      if (loadingElement) {
+        loadingElement.innerHTML = `
+          <div class="error-message">
+            <h3>Error al cargar los datos</h3>
+            <p>${error.message}</p>
+            <p>Se han intentado todas las rutas posibles.</p>
+          </div>`;
+      }
     });
 });
